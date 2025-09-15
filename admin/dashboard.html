@@ -124,33 +124,48 @@
 <script src="../js/mock-data.js"></script>
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    // Load summary card data
+    // Function to handle company status updates
+    const handleCompanyStatus = (companyId, newStatus) => {
+      const company = window.mockData.companies.find(c => c.id === companyId);
+      if (company) {
+        company.status = newStatus;
+        renderPendingCompanies();
+      }
+    };
+
+    // Function to render pending companies
+    const renderPendingCompanies = () => {
+      const pendingCompanies = window.mockData.companies.filter(c => c.status === 'Pending');
+      document.getElementById('pending-companies').textContent = pendingCompanies.length;
+      
+      const pendingTbody = document.getElementById('pending-companies-tbody');
+      pendingTbody.innerHTML = ''; // Clear existing rows
+
+      if (pendingCompanies.length === 0) {
+        pendingTbody.innerHTML = '<tr><td colspan="4" class="text-center">No companies are pending verification.</td></tr>';
+      } else {
+        pendingCompanies.forEach(company => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${company.name}</td>
+            <td>${company.industry}</td>
+            <td><span class="badge bg-warning text-dark">${company.status}</span></td>
+            <td>
+              <button class="btn btn-sm btn-success" data-company-id="${company.id}" data-action="approve">Approve</button>
+              <button class="btn btn-sm btn-danger" data-company-id="${company.id}" data-action="reject">Reject</button>
+            </td>
+          `;
+          pendingTbody.appendChild(row);
+        });
+      }
+    };
+
+    // Load initial data and render tables
     document.getElementById('total-students').textContent = window.mockData.students.length;
     document.getElementById('total-companies').textContent = window.mockData.companies.length;
     document.getElementById('total-internships').textContent = window.mockData.internships.length;
     
-    const pendingCompanies = window.mockData.companies.filter(c => c.status === 'Pending');
-    document.getElementById('pending-companies').textContent = pendingCompanies.length;
-
-    // Load pending companies table
-    const pendingTbody = document.getElementById('pending-companies-tbody');
-    if (pendingCompanies.length === 0) {
-      pendingTbody.innerHTML = '<tr><td colspan="4" class="text-center">No companies are pending verification.</td></tr>';
-    } else {
-      pendingCompanies.forEach(company => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td>${company.name}</td>
-          <td>${company.industry}</td>
-          <td><span class="badge bg-warning text-dark">${company.status}</span></td>
-          <td>
-            <button class="btn btn-sm btn-success">Approve</button>
-            <button class="btn btn-sm btn-danger">Reject</button>
-          </td>
-        `;
-        pendingTbody.appendChild(row);
-      });
-    }
+    renderPendingCompanies();
 
     // Load recent internships table
     const recentInternshipsTbody = document.getElementById('recent-internships-tbody');
@@ -169,6 +184,19 @@
         recentInternshipsTbody.appendChild(row);
       });
     }
+
+    // Add event listeners for approve/reject buttons
+    const pendingTbody = document.getElementById('pending-companies-tbody');
+    pendingTbody.addEventListener('click', (event) => {
+      const target = event.target;
+      if (target.matches('[data-action="approve"]')) {
+        const companyId = parseInt(target.getAttribute('data-company-id'));
+        handleCompanyStatus(companyId, 'Approved');
+      } else if (target.matches('[data-action="reject"]')) {
+        const companyId = parseInt(target.getAttribute('data-company-id'));
+        handleCompanyStatus(companyId, 'Rejected');
+      }
+    });
   });
 </script>
 
