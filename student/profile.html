@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Student Profile</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <div class="container">
+    <a class="navbar-brand" href="#">Student Portal</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#studentNavbar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="studentNavbar">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="dashboard.html">Dashboard</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="../internships/list.html">Find Internships</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="applications.html">My Applications</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="profile.html">Profile</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="../index.html">Logout</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-10">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h4 class="mb-0">My Profile</h4>
+          <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editProfileModal">Edit Profile</button>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-4 text-center">
+              <img src="https://via.placeholder.com/150" class="img-fluid rounded-circle mb-3" alt="Profile Picture">
+              <h4>John Doe</h4>
+              <p class="text-muted">Student</p>
+            </div>
+            <div class="col-md-8">
+              <h5>Details</h5>
+              <hr>
+              <div class="row">
+                <div class="col-md-6">
+                  <p><strong>First Name:</strong> John</p>
+                  <p><strong>Last Name:</strong> Doe</p>
+                  <p><strong>Email:</strong> john.doe@example.com</p>
+                  <p><strong>Phone:</strong> 123-456-7890</p>
+                </div>
+                <div class="col-md-6">
+                  <p><strong>Department:</strong> Computer Science</p>
+                  <p><strong>Batch:</strong> 2025</p>
+                  <p><strong>CGPA:</strong> 8.5</p>
+                  <p><strong>Enrollment Date:</strong> 2021-08-01</p>
+                </div>
+              </div>
+              <h5 class="mt-4">Resume</h5>
+              <hr>
+              <p>No resume uploaded. <a href="#">Upload Now</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Profile Modal -->
+<div class="modal fade" id="editProfileModal" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Edit Profile</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Edit form would go here -->
+        <p>This form will allow users to update their profile details.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save Changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../js/main.js"></script>
+</body>
+</html>

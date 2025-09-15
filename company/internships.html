@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Manage Internships</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand" href="#">Company Portal</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#companyNavbar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="companyNavbar">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="dashboard.html">Dashboard</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="internships.html">Manage Internships</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="../index.html">Logout</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container py-5">
+
+  <!-- View: List of Internships -->
+  <div id="view-list">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="mb-0">Your Internships</h2>
+      <a href="internships.html?action=new" class="btn btn-primary">Post New Internship</a>
+    </div>
+    <div class="card">
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Location</th>
+                <th>Duration</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="internships-tbody">
+              <!-- Internship rows go here -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- View: Add/Edit Form -->
+  <div id="view-form" style="display: none;">
+    <h2 id="form-title" class="mb-4">Post New Internship</h2>
+    <div class="card">
+      <div class="card-body">
+        <form id="internship-form">
+          <input type="hidden" id="internship-id">
+          <div class="mb-3">
+            <label for="title" class="form-label">Internship Title</label>
+            <input type="text" class="form-control" id="title" required>
+          </div>
+          <div class="mb-3">
+            <label for="location" class="form-label">Location</label>
+            <input type="text" class="form-control" id="location" required>
+          </div>
+          <div class="mb-3">
+            <label for="duration" class="form-label">Duration</label>
+            <input type="text" class="form-control" id="duration" placeholder="e.g., 12 Weeks" required>
+          </div>
+          <div class="mb-3">
+            <label for="requirements" class="form-label">Requirements</label>
+            <textarea class="form-control" id="requirements" rows="3" placeholder="e.g., HTML, CSS, JavaScript" required></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea class="form-control" id="description" rows="5" required></textarea>
+          </div>
+          <div class="d-flex justify-content-end">
+            <a href="internships.html" class="btn btn-secondary me-2">Cancel</a>
+            <button type="submit" class="btn btn-primary">Save Internship</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../js/mock-data.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const companyId = 1; // Assuming company ID 1 is logged in
+    const urlParams = new URLSearchParams(window.location.search);
+    const action = urlParams.get('action');
+    const internshipId = urlParams.get('id');
+
+    const viewList = document.getElementById('view-list');
+    const viewForm = document.getElementById('view-form');
+    const formTitle = document.getElementById('form-title');
+    const internshipForm = document.getElementById('internship-form');
+
+    if (action === 'new' || action === 'edit') {
+      viewList.style.display = 'none';
+      viewForm.style.display = 'block';
+      
+      if (action === 'edit' && internshipId) {
+        formTitle.textContent = 'Edit Internship';
+        const internship = window.mockData.internships.find(i => i.id == internshipId && i.companyId == companyId);
+        if (internship) {
+          document.getElementById('internship-id').value = internship.id;
+          document.getElementById('title').value = internship.title;
+          document.getElementById('location').value = internship.location;
+          document.getElementById('duration').value = internship.duration;
+          document.getElementById('requirements').value = internship.requirements;
+          document.getElementById('description').value = internship.description;
+        }
+      } else {
+        formTitle.textContent = 'Post New Internship';
+      }
+
+      internshipForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        alert('Internship saved! (This is a demo)');
+        window.location.href = 'internships.html';
+      });
+
+    } else {
+      // Display the list
+      const internshipsTbody = document.getElementById('internships-tbody');
+      const companyInternships = window.mockData.internships.filter(i => i.companyId === companyId);
+
+      if (companyInternships.length === 0) {
+        internshipsTbody.innerHTML = '<tr><td colspan="4" class="text-center">You have not posted any internships yet.</td></tr>';
+        return;
+      }
+
+      companyInternships.forEach(internship => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${internship.title}</td>
+          <td>${internship.location}</td>
+          <td>${internship.duration}</td>
+          <td>
+            <a href="internships.html?action=edit&id=${internship.id}" class="btn btn-sm btn-outline-primary">Edit</a>
+            <button class="btn btn-sm btn-outline-danger" onclick="alert('Deleted! (This is a demo)')">Delete</button>
+          </td>
+        `;
+        internshipsTbody.appendChild(row);
+      });
+    }
+  });
+</script>
+
+</body>
+</html>

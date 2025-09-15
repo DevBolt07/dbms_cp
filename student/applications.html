@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>My Applications</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <div class="container">
+    <a class="navbar-brand" href="#">Student Portal</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#studentNavbar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="studentNavbar">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="dashboard.html">Dashboard</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="../internships/list.html">Find Internships</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="applications.html">My Applications</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="profile.html">Profile</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="../index.html">Logout</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container py-5">
+  <h2 class="mb-4">My Applications</h2>
+  <div class="card">
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead>
+            <tr>
+              <th scope="col">Company</th>
+              <th scope="col">Internship Role</th>
+              <th scope="col">Date Applied</th>
+              <th scope="col">Status</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="applications-tbody">
+            <!-- Application rows will be inserted here dynamically -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../js/mock-data.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const applicationsBody = document.getElementById('applications-tbody');
+    
+    // We'll assume the logged-in student has ID 1 for this mock setup
+    const studentId = 1;
+
+    const studentApplications = window.mockData.applications.filter(app => app.studentId === studentId);
+
+    if (studentApplications.length === 0) {
+      applicationsBody.innerHTML = '<tr><td colspan="5" class="text-center">You have not applied to any internships yet.</td></tr>';
+      return;
+    }
+
+    studentApplications.forEach(app => {
+      const internship = window.mockData.internships.find(i => i.id === app.internshipId);
+      const company = window.mockData.companies.find(c => c.id === internship.companyId);
+
+      const statusBadges = {
+        'Applied': 'bg-success',
+        'Under Review': 'bg-warning text-dark',
+        'Interviewing': 'bg-info text-dark',
+        'Offered': 'bg-primary',
+        'Rejected': 'bg-danger',
+      };
+      const badgeClass = statusBadges[app.status] || 'bg-secondary';
+
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${company.name}</td>
+        <td>${internship.title}</td>
+        <td>${app.dateApplied}</td>
+        <td><span class="badge ${badgeClass}">${app.status}</span></td>
+        <td>
+          <button class="btn btn-sm btn-outline-danger">Withdraw</button>
+        </td>
+      `;
+      applicationsBody.appendChild(row);
+    });
+  });
+</script>
+
+</body>
+</html>

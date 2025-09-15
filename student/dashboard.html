@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Student Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <div class="container">
+    <a class="navbar-brand" href="#">Student Portal</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#studentNavbar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="studentNavbar">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link active" href="dashboard.html">Dashboard</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="../internships/list.html">Find Internships</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="applications.html">My Applications</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="profile.html">Profile</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="../index.html">Logout</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+  <h2 class="mb-4">Dashboard</h2>
+  <div class="row">
+    <!-- Profile Summary -->
+    <div class="col-md-4 mb-4">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">John Doe</h5>
+          <h6 class="card-subtitle mb-2 text-muted">Computer Science</h6>
+          <p class="card-text">CGPA: 8.5</p>
+          <a href="profile.html" class="btn btn-sm btn-outline-primary">View Profile</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mentor Info -->
+    <div class="col-md-4 mb-4">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Mentor Information</h5>
+          <p><strong>Name:</strong> Dr. Jane Smith</p>
+          <p><strong>Email:</strong> j.smith@example.com</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notifications -->
+    <div class="col-md-4 mb-4">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Notifications</h5>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">New internship from Google posted.</li>
+            <li class="list-group-item">Your application for Microsoft was viewed.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Applications -->
+  <div class="card">
+    <div class="card-header">
+      Recent Applications
+    </div>
+    <div class="card-body">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>Company</th>
+            <th>Role</th>
+            <th>Status</th>
+            <th>Date Applied</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Tech Solutions Inc.</td>
+            <td>Frontend Developer Intern</td>
+            <td><span class="badge bg-warning text-dark">Under Review</span></td>
+            <td>2024-10-26</td>
+          </tr>
+          <tr>
+            <td>Innovatech</td>
+            <td>Data Science Intern</td>
+            <td><span class="badge bg-success">Applied</span></td>
+            <td>2024-10-25</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../js/main.js"></script>
+</body>
+</html>

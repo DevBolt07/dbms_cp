@@ -1,0 +1,12 @@
+{
+  "name": "internship-portal-project",
+  "version": "1.0.0",
+  "description": "Internship Portal",
+  "main": "index.html",
+  "scripts": {
+    "start": "http-server"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}

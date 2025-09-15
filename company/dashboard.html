@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Company Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand" href="#">Company Portal</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#companyNavbar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="companyNavbar">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link active" href="dashboard.html">Dashboard</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="internships.html">Manage Internships</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="../index.html">Logout</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container py-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">Company Dashboard</h2>
+    <a href="internships.html?action=new" class="btn btn-primary">Post New Internship</a>
+  </div>
+
+  <div class="row">
+    <!-- Summary Cards -->
+    <div class="col-md-4 mb-4">
+      <div class="card text-center">
+        <div class="card-body">
+          <h5 class="card-title">Total Internships</h5>
+          <p class="card-text fs-4" id="total-internships">0</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 mb-4">
+      <div class="card text-center">
+        <div class="card-body">
+          <h5 class="card-title">Total Applications</h5>
+          <p class="card-text fs-4" id="total-applications">0</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 mb-4">
+      <div class="card text-center">
+        <div class="card-body">
+          <h5 class="card-title">Pending Reviews</h5>
+          <p class="card-text fs-4" id="pending-reviews">0</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Applications Table -->
+  <div class="card">
+    <div class="card-header">
+      Recent Applications
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>Internship</th>
+              <th>Student Name</th>
+              <th>Date Applied</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="recent-applications-tbody">
+            <!-- Data will be loaded dynamically -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../js/mock-data.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Assuming company with ID 1 is logged in
+    const companyId = 1;
+    const companyInternships = window.mockData.internships.filter(i => i.companyId === companyId);
+    const companyApplications = window.mockData.applications.filter(app => companyInternships.some(i => i.id === app.internshipId));
+
+    document.getElementById('total-internships').textContent = companyInternships.length;
+    document.getElementById('total-applications').textContent = companyApplications.length;
+    document.getElementById('pending-reviews').textContent = companyApplications.filter(app => app.status === 'Under Review').length;
+
+    const applicationsTbody = document.getElementById('recent-applications-tbody');
+    if (companyApplications.length === 0) {
+      applicationsTbody.innerHTML = '<tr><td colspan="5" class="text-center">No applications received yet.</td></tr>';
+      return;
+    }
+
+    companyApplications.slice(0, 5).forEach(app => { // Show latest 5
+      const internship = companyInternships.find(i => i.id === app.internshipId);
+      const student = window.mockData.students.find(s => s.id === app.studentId);
+      const studentName = `${student.firstName} ${student.lastName}`;
+
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${internship.title}</td>
+        <td>${studentName}</td>
+        <td>${app.dateApplied}</td>
+        <td><span class="badge bg-warning text-dark">${app.status}</span></td>
+        <td>
+          <a href="#" class="btn btn-sm btn-outline-primary">View Application</a>
+        </td>
+      `;
+      applicationsTbody.appendChild(row);
+    });
+  });
+</script>
+
+</body>
+</html>
