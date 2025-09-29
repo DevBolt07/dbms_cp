@@ -77,7 +77,6 @@
             <tr>
               <th>Internship</th>
               <th>Student Name</th>
-              <th>Date Applied</th>
               <th>Status</th>
               <th>Actions</th>
             </tr>
@@ -92,41 +91,68 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script src="../js/mock-data.js"></script>
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    // Assuming company with ID 1 is logged in
+  document.addEventListener('DOMContentLoaded', async () => {
+    // In a real application, you'd get the company ID from a login session.
+    // For now, we'll hardcode it.
     const companyId = 1;
-    const companyInternships = window.mockData.internships.filter(i => i.companyId === companyId);
-    const companyApplications = window.mockData.applications.filter(app => companyInternships.some(i => i.id === app.internshipId));
 
-    document.getElementById('total-internships').textContent = companyInternships.length;
-    document.getElementById('total-applications').textContent = companyApplications.length;
-    document.getElementById('pending-reviews').textContent = companyApplications.filter(app => app.status === 'Under Review').length;
+    const loadStats = async (id) => {
+      try {
+        const response = await fetch(`/api/company/${id}/stats`);
+        if (!response.ok) throw new Error('Failed to fetch stats');
+        const stats = await response.json();
+        document.getElementById('total-internships').textContent = stats.totalInternships || 0;
+        document.getElementById('total-applications').textContent = stats.totalApplications || 0;
+        // Note: Pending reviews logic will be added later
+      } catch (error) {
+        console.error("Error loading stats:", error);
+        document.getElementById('total-internships').textContent = 'Error';
+        document.getElementById('total-applications').textContent = 'Error';
+      }
+    };
 
-    const applicationsTbody = document.getElementById('recent-applications-tbody');
-    if (companyApplications.length === 0) {
-      applicationsTbody.innerHTML = '<tr><td colspan="5" class="text-center">No applications received yet.</td></tr>';
-      return;
-    }
+    const loadApplications = async (id) => {
+        const applicationsTbody = document.getElementById('recent-applications-tbody');
+      try {
+        const response = await fetch(`/api/company/${id}/applications`);
+        if (!response.ok) throw new Error('Failed to fetch applications');
+        const applications = await response.json();
 
-    companyApplications.slice(0, 5).forEach(app => { // Show latest 5
-      const internship = companyInternships.find(i => i.id === app.internshipId);
-      const student = window.mockData.students.find(s => s.id === app.studentId);
-      const studentName = `${student.firstName} ${student.lastName}`;
+        applicationsTbody.innerHTML = ''; // Clear
 
-      const row = document.createElement('tr');
-      row.innerHTML = `
-        <td>${internship.title}</td>
-        <td>${studentName}</td>
-        <td>${app.dateApplied}</td>
-        <td><span class="badge bg-warning text-dark">${app.status}</span></td>
-        <td>
-          <a href="#" class="btn btn-sm btn-outline-primary">View Application</a>
-        </td>
-      `;
-      applicationsTbody.appendChild(row);
-    });
+        if (applications.length === 0) {
+            applicationsTbody.innerHTML = '<tr><td colspan="4" class="text-center">No applications received yet.</td></tr>';
+            return;
+        }
+
+        document.getElementById('pending-reviews').textContent = applications.filter(app => app.status === 'Pending').length;
+
+        applications.forEach(app => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${app.internship_title}</td>
+                <td>${app.student_name}</td>
+                <td><span class="badge bg-warning text-dark">${app.status}</span></td>
+                <td>
+                <a href="#" class="btn btn-sm btn-outline-primary">View Application</a>
+                </td>
+            `;
+            applicationsTbody.appendChild(row);
+        });
+
+      } catch (error) {
+        console.error("Error loading applications:", error);
+        applicationsTbody.innerHTML = '<tr><td colspan="4" class="text-center text-danger">Failed to load applications.</td></tr>';
+      }
+    };
+
+    // Load all data concurrently
+    await Promise.all([
+        loadStats(companyId),
+        loadApplications(companyId)
+    ]);
+
   });
 </script>
 

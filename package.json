@@ -2,14 +2,22 @@
   "name": "internship-portal-project",
   "version": "1.0.0",
   "description": "Internship Portal",
-  "main": "index.html",
+  "main": "server.js",
   "scripts": {
-    "start": "http-server"
+    "start": "node server.js",
+    "start:dev": "nodemon server.js"
   },
   "devDependencies": {
-    "http-server": "^14.1.1"
+    "http-server": "^14.1.1",
+    "nodemon": "^3.1.10"
   },
   "dependencies": {
-    "i": "^0.3.7"
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.2",
+    "express": "^5.1.0",
+    "i": "^0.3.7",
+    "jsonwebtoken": "^9.0.2",
+    "mysql2": "^3.15.1"
   }
 }
